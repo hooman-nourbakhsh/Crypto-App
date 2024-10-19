@@ -25,12 +25,14 @@ function HomePage() {
         console.log(error);
       }
     };
+
     getData();
   }, [page, currency]);
+
   return (
     <div>
       <Search currency={currency} setCurrency={setCurrency} />
-      <TableCoin coins={coins} isLoading={isLoading} setChart={setChart} />
+      <TableCoin coins={coins} isLoading={isLoading} currency={currency} setChart={setChart} />
       <Pagination page={page} setPage={setPage} />
       {!!chart && <Chart chart={chart} setChart={setChart} />}
     </div>

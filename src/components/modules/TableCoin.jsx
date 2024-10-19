@@ -5,7 +5,7 @@ import chartUp from "../../assets/chart-up.svg";
 import chartDown from "../../assets/chart-down.svg";
 import styles from "./TableCoin.module.css";
 
-function TableCoin({ coins, isLoading, setChart }) {
+function TableCoin({ coins, isLoading, currency, setChart }) {
   return (
     <div className={styles.container}>
       {isLoading ? (
@@ -24,7 +24,7 @@ function TableCoin({ coins, isLoading, setChart }) {
           </thead>
           <tbody>
             {coins.map((coin) => (
-              <TableRow coin={coin} key={coin.id} setChart={setChart} />
+              <TableRow coin={coin} key={coin.id} currency={currency} setChart={setChart} />
             ))}
           </tbody>
         </table>
@@ -35,9 +35,8 @@ function TableCoin({ coins, isLoading, setChart }) {
 
 export default TableCoin;
 
-const TableRow = ({ coin, setChart }) => {
-  const { id, name, image, symbol, current_price, price_change_percentage_24h: price_change, total_volume } = coin;
-
+const TableRow = ({ coin, currency, setChart }) => {
+  const { id, name, image, symbol, total_volume, current_price, price_change_percentage_24h: price_change } = coin;
   const showHandler = async () => {
     try {
       const res = await fetch(marketChart(id));
@@ -57,7 +56,11 @@ const TableRow = ({ coin, setChart }) => {
         </div>
       </td>
       <td>{name}</td>
-      <td>{current_price.toLocaleString()}</td>
+      <td>
+        {{"usd": "$", "eur": "€", "jpy": "¥"}[currency]}
+        {/* {currency === "usd" ? "$" : currency === "eur" ? "€" : "¥"} */}
+        {current_price.toLocaleString()}
+      </td>
       <td className={price_change > 0 ? styles.positive : styles.negative}>{price_change.toFixed(2)}%</td>
       <td>{total_volume.toLocaleString()}</td>
       <td>

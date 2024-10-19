@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { searchCoin } from "../../services/cryptoApi";
 import { RotatingLines } from "react-loader-spinner";
-
 import styles from "./Search.module.css";
 
 function Search({ currency, setCurrency }) {
   const [text, setText] = useState("");
   const [coins, setCoins] = useState([]);
-  const [isLoading, setisLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
 
     setCoins([]);
     if (!text) {
-      setisLoading(false);
+      setIsLoading(false);
       return;
     }
 
@@ -24,15 +23,16 @@ function Search({ currency, setCurrency }) {
         const json = await res.json();
         if (json.coins) {
           setCoins(json.coins);
-          setisLoading(false);
+          setIsLoading(false);
         } else {
-          alert("No coins found");
+          alert(json.status);
         }
       } catch (error) {
         if (error.name !== "AbortError") console.log(error);
       }
     };
-    setisLoading(true);
+
+    setIsLoading(true);
     search();
     return () => controller.abort();
   }, [text]);
